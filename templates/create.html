@@ -1,0 +1,21 @@
+<!-- templates/create.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ 'Editar' if item else 'Crear' }} Elemento</title>
+</head>
+<body>
+    <h1>{{ 'Editar' if item else 'Crear' }} Elemento</h1>
+    <form method="POST">
+        <label>Título:</label><br>
+        <input type="text" name="title" value="{{ item.title if item }}" required><br><br>
+
+        <label>Descripción:</label><br>
+        <textarea name="description">{{ item.description if item }}</textarea><br><br>
+
+        <button type="submit">Guardar</button>
+        <a href="{{ url_for('index') }}">Cancelar</a>
+    </form>
+</body>
+</html>

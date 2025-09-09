@@ -1,0 +1,98 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD con QR - Tabla</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .qr-img {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #ddd;
+        }
+        .actions a {
+            margin: 0 5px;
+            text-decoration: none;
+        }
+        .btn {
+            padding: 5px 10px;
+            font-size: 12px;
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            border-radius: 3px;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        .btn-edit {
+            background-color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <h1>📋 Registro de Elementos</h1>
+    <a href="{{ url_for('create') }}" class="btn">➕ Agregar nuevo</a>
+    <hr>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if items %}
+      <table>
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            <th>QR (Escanear para eliminar)</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+            <tr>
+              <td>{{ item.title }}</td>
+              <td>{{ item.description }}</td>
+              <td>{{ item.created_at }}</td>
+              <td>
+                <img src="{{ url_for('static', filename='qrcodes/' + item.id + '.png') }}" 
+                     alt="QR" class="qr-img">
+              </td>
+              <td class="actions">
+                <a href="{{ url_for('edit', item_id=item.id) }}" class="btn btn-edit">✏️ Editar</a>
+                <a href="{{ url_for('delete_manual', item_id=item.id) }}" 
+                   class="btn btn-danger" 
+                   onclick="return confirm('¿Eliminar manualmente?')">🗑️ Eliminar</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No hay elementos registrados.</p>
+    {% endif %}
+</body>
+</html>
